@@ -21,9 +21,13 @@ def check_outliers(data, location):
         IQR = Q3 - Q1
         lower_bound = Q1 - 1.5 * IQR
         upper_bound = Q3 + 1.5 * IQR
-        outliers[column] = data[(data[column] < lower_bound) | (data[column] > upper_bound)].shape[0]
+        outlier_count = data[(data[column] < lower_bound) | (data[column] > upper_bound)].shape[0]
+        outliers[column] = outlier_count
     
-    return outliers
+    # Convert the dictionary to a DataFrame for better presentation
+    outliers_df = pd.DataFrame.from_dict(outliers, orient='index', columns=['Outlier Count'])
+    outliers_df.index.name = 'Column'
+    return outliers_df
 
 
 def check_negative_values(data, location):
@@ -33,7 +37,10 @@ def check_negative_values(data, location):
         if count_negatives > 0:
             negative_values[column] = count_negatives
     
-    return negative_values
+    # Convert the dictionary to a DataFrame for better presentation
+    negative_values_df = pd.DataFrame.from_dict(negative_values, orient='index', columns=['Negative Count'])
+    negative_values_df.index.name = 'Column'
+    return negative_values_df
 
 def check_missing_values(data, location):
     # Get the count of missing values for each column

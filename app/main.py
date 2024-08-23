@@ -23,7 +23,7 @@ def load_data():
 # Add a title and introduction
 st.title("🌞 Solar Data Analysis Dashboard")
 st.markdown("""
-Welcome to the Solar Data Analysis Dashboard! This tool allows you to explore and visualize solar energy data, 
+Welcome to the Solar Data Analysis Dashboard! This tool allows you to explore and visualize solar energy data for benin-malanville, 
 including solar radiation components, temperature measures, and wind conditions. Use the options in the sidebar 
 to navigate through different analyses and visualizations.
 """)
@@ -58,11 +58,13 @@ elif sidebar_option == "Missing Values":
 
 elif sidebar_option == "Outliers":
     st.header("Outliers")
-    st.write(check_outliers(benin_data, 'Benin'))
+    outliers_df = check_outliers(benin_data, 'Benin')
+    st.dataframe(outliers_df)
 
 elif sidebar_option == "Negative Values":
     st.header("Negative Values")
-    st.write(check_negative_values(benin_data, 'Benin'))
+    negative_values_df = check_negative_values(benin_data, 'Benin')
+    st.dataframe(negative_values_df) 
 
 elif sidebar_option == "Time Series Plot":
     st.header("Time Series Plot")
@@ -102,7 +104,7 @@ elif sidebar_option == "Histograms":
 # Add footer
 st.markdown("""
 ---
-Made with ❤️ by [Abrham]. For more details, visit [Your GitHub](https://github.com/abrhame).
+Made with ❤️ by Abrham. For more details, visit [github](https://github.com/abrhame).
 """)
 
 # Apply custom CSS for additional styling
