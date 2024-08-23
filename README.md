@@ -1,7 +1,6 @@
 # solar farm data
 
 
-
 ## Overview
 
 Data analysis and visualizations focused on the solar radiation and solar farm data, providing insights into energy efficiency and potential applications. This repository includes data processing scripts, analytical models, and visual tools to explore and optimize solar and lunar energy sources
@@ -79,3 +78,4 @@ Data analysis and visualizations focused on the solar radiation and solar farm d
 - [Streamlit Documentation](https://docs.streamlit.io/)
 - [Pandas Documentation](https://pandas.pydata.org/docs/)
 - [Matplotlib Documentation](https://matplotlib.org/stable/contents.html)
+
