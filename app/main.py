@@ -102,7 +102,7 @@ elif sidebar_option == "Histograms":
 # Add footer
 st.markdown("""
 ---
-Made with ❤️ by [Your Name]. For more details, visit [Your GitHub](https://github.com/yourgithub).
+Made with ❤️ by [Abrham]. For more details, visit [Your GitHub](https://github.com/abrhame).
 """)
 
 # Apply custom CSS for additional styling
