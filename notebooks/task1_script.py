@@ -56,37 +56,44 @@ def plot_time_series(data, country_name):
 
 
 def plot_area(data, title):
-    data = data.head(1000)
+    data = data.head(1000).copy()
     data['Timestamp'] = pd.to_datetime(data['Timestamp'])
     data.sort_values('Timestamp', inplace=True)
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax.fill_between(data['Timestamp'], data['GHI'], color="lightblue", alpha=0.4)
-    ax.fill_between(data['Timestamp'], data['DNI'], color="lightcoral", alpha=0.4)
-    ax.fill_between(data['Timestamp'], data['DHI'], color="lightgreen", alpha=0.4)
+    ax.fill_between(data['Timestamp'], data['GHI'], color="lightblue", alpha=0.4, label='GHI')
+    ax.fill_between(data['Timestamp'], data['DNI'], color="lightcoral", alpha=0.4, label='DNI')
+    ax.fill_between(data['Timestamp'], data['DHI'], color="lightgreen", alpha=0.4, label='DHI')
 
-    ax.plot(data['Timestamp'], data['GHI'], color="blue", alpha=0.8, label='GHI')
-    ax.plot(data['Timestamp'], data['DNI'], color="red", alpha=0.8, label='DNI')
-    ax.plot(data['Timestamp'], data['DHI'], color="green", alpha=0.8, label='DHI')
+    ax.plot(data['Timestamp'], data['GHI'], color="blue", alpha=0.8)
+    ax.plot(data['Timestamp'], data['DNI'], color="red", alpha=0.8)
+    ax.plot(data['Timestamp'], data['DHI'], color="green", alpha=0.8)
 
     ax.legend()
     ax.set_title(title)
     ax.set_xlabel('Timestamp')
     ax.set_ylabel('Values')
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45)  # Rotate x-axis labels for better readability
+
+    # Set xticks and labels
+    ticks = ax.get_xticks()
+    ax.set_xticks(ticks)  # Ensure ticks are set before labels
+    ax.set_xticklabels([pd.to_datetime(tick).strftime('%Y-%m-%d') for tick in ticks], rotation=45)
+
     fig.tight_layout()
     return fig
 
-
 def evaluate_cleaning_impact(data, timestamp_col='Timestamp', cleaning_col='Cleaning', modA_col='ModA', modB_col='ModB'):
-    data = data.head(1000)
+    data = data.head(1000).copy()  # Avoid modifying slices
     data[timestamp_col] = pd.to_datetime(data[timestamp_col])
     data[cleaning_col] = data[cleaning_col].astype(bool)
-    data['Period'] = data[cleaning_col].shift(1).fillna(False).astype(int).cumsum()
+    
+    # Use infer_objects to ensure future compatibility
+    data['Period'] = data[cleaning_col].shift(1).fillna(False).astype(int).cumsum().infer_objects()
 
     fig, ax = plt.subplots(2, 1, figsize=(14, 10))
 
+    # Plot for ModA
     for key, grp in data.groupby(['Period']):
         ax[0].plot(grp[timestamp_col], grp[modA_col], label=f'Period {key}')
     ax[0].set_title(f'Impact of Cleaning on {modA_col} Readings Over Time')
@@ -94,6 +101,7 @@ def evaluate_cleaning_impact(data, timestamp_col='Timestamp', cleaning_col='Clea
     ax[0].set_ylabel(modA_col)
     ax[0].legend()
 
+    # Plot for ModB
     for key, grp in data.groupby(['Period']):
         ax[1].plot(grp[timestamp_col], grp[modB_col], label=f'Period {key}')
     ax[1].set_title(f'Impact of Cleaning on {modB_col} Readings Over Time')
@@ -103,7 +111,6 @@ def evaluate_cleaning_impact(data, timestamp_col='Timestamp', cleaning_col='Clea
 
     fig.tight_layout()
     return fig
-
 
 def correlation_analysis(data):
     data = data.head(1000)
@@ -129,8 +136,9 @@ def correlation_analysis(data):
 
 
 def wind_analysis(data, ws_col='WS', wd_col='WD', title='Wind Speed and Direction Analysis'):
-    data = data.head(1000)
+    data = data.head(1000).copy()  # Make a copy to avoid SettingWithCopyWarning
     data['Wind_Direction_Radians'] = np.deg2rad(data[wd_col])
+    
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, polar=True)
 
@@ -142,6 +150,7 @@ def wind_analysis(data, ws_col='WS', wd_col='WD', title='Wind Speed and Directio
     ax.set_theta_zero_location('N')
     ax.set_theta_direction(-1)
     fig.tight_layout()
+    
     return fig
 
 

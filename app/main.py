@@ -15,8 +15,8 @@ st.set_page_config(page_title="Solar Data Analysis Dashboard", layout="wide", in
 
 # Load and preprocess data
 @st.cache_data
-def load_data(filepath):
-    data = pd.read_csv(filepath)
+def load_data():
+    data = pd.read_csv('./data/benin-malanville.csv')
     return data.head(1000)  # Limit to 1000 rows for faster processing
 
 
@@ -44,13 +44,8 @@ sidebar_option = st.sidebar.radio("Select Analysis", [
     "Histograms"
 ])
 
-# Load the data
-data_file = st.sidebar.file_uploader("Upload CSV", type=["csv"])
-if data_file is not None:
-    benin_data = load_data(data_file)
-else:
-    st.warning("Please upload a CSV file to get started.")
-    st.stop()
+
+benin_data = load_data()
 
 # Display selected analysis
 if sidebar_option == "Summary Statistics":
